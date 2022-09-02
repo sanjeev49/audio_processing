@@ -1,6 +1,5 @@
-"""This script takes one clipped file and declips it. It was created for
-the declipping blog post."""
-from scipy.io.wavfile import read, write
+"""This script takes one clipped file and declips it. It was created for """
+from scipy.io.wavfile import  write
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -67,8 +66,8 @@ def plot_special_segment(np_array):
     plt.show()
 
 
-def save_bad_file(sample_rate, new_array):
-    write("bad_file.wav", sample_rate, new_array)
+def save_bad_file(sample_rate, new_array, bad_file_location):
+    write(bad_file_location, sample_rate, new_array)
 
 
 def save_file(sample_rate, new_array, new_path):
@@ -83,29 +82,29 @@ def save_file(sample_rate, new_array, new_path):
     # save the wav
     write(new_path, sample_rate, new_array)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--wav_path',  help='Path of the wav file to be declipped', default="data/outputs/recordeded_file_2022-09-0208-27-12.wav")
-    parser.add_argument('--new_path', help='Path to save the new declipped wav file', default= "data/declipped_audio/hi.wav")
-    args = parser.parse_args()
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument('--wav_path',  help='Path of the wav file to be declipped', default="data/outputs/recordeded_file_2022-09-0208-27-12.wav")
+#     parser.add_argument('--new_path', help='Path to save the new declipped wav file', default= "data/declipped_audio/hi.wav")
+#     args = parser.parse_args()
 
-    sample_rate, file_info = read(args.wav_path)
-    np_array = np.array(file_info, dtype=float)  # load int16 wav file
+#     sample_rate, file_info = read(args.wav_path)
+#     np_array = np.array(file_info, dtype=float)  # load int16 wav file
 
-    # plot the special segment from the tutorial wav file
-    plot_special_segment(np_array)
+#     # plot the special segment from the tutorial wav file
+#     plot_special_segment(np_array)
 
-    # identify bad segments
-    segments = get_segments(np_array)
+#     # identify bad segments
+#     segments = get_segments(np_array)
 
-    # declip the segments
-    new_array = declip_segments(segments, np_array)
+#     # declip the segments
+#     new_array = declip_segments(segments, np_array)
 
-    #plot the special segment from the tutorial wav file
-    plot_special_segment(new_array)
+#     #plot the special segment from the tutorial wav file
+#     plot_special_segment(new_array)
 
-    # save bad array from tutorial to demonstrate that we need to rescale
-    save_bad_file(sample_rate, new_array)
+#     # save bad array from tutorial to demonstrate that we need to rescale
+#     save_bad_file(sample_rate, new_array)
 
-    # save new wav file
-    save_file(sample_rate, new_array, args.new_path)
+#     # save new wav file
+#     save_file(sample_rate, new_array, args.new_path)

@@ -1,2 +1,2 @@
 # audio_processing
-In this repository we are discussing about audio data processing
+We can utilize this repository to process audio data. 
