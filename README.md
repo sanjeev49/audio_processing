@@ -9,6 +9,12 @@ We can utilize this repository to process audio data.
 ## 📝 Description
 - This implemantation is based on processing of audio data.
 - In this project we have used **pygame** and **pyaudio** for audio processing.
+- There are four routes for this api
+- record_and_save
+- play
+- plot_audio
+- denoise
+- declipping
 
 
 
