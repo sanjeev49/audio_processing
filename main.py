@@ -18,7 +18,7 @@ from fastapi import FastAPI
 # read yaml file 
 config = read_yaml('configs/configs.yaml')
 
-# getting variables for the project 
+# getting variables  , define directories
 root_dir = os.getcwd()
 artifacts = config["artifacts"]
 artifacts_dir = os.path.join(root_dir, artifacts["ARTIFACTS_DIR"])
@@ -26,28 +26,24 @@ input_dir = os.path.join(artifacts_dir, artifacts["INPUT_DIR"])
 output_dir = os.path.join(artifacts_dir, artifacts["OUTPUT_DIR"])
 removed_noise_dir = os.path.join(artifacts_dir, artifacts["REMOVED_NOISE_DIR"])
 declipped_dir = os.path.join(artifacts_dir, artifacts["DECLIPPED_DIR"])
-create_directories([artifacts_dir, input_dir, output_dir, removed_noise_dir, declipped_dir])
+bad_dir = os.path.join(artifacts_dir, artifacts["BAD_DIR"])
+create_directories([artifacts_dir, input_dir, output_dir, removed_noise_dir, declipped_dir, bad_dir])
 frames_per_buffer = artifacts["FRAMES_PER_BUFFER"]
 channels = artifacts["CHANNELS"]
 rate = artifacts["RATE"]
 seconds = artifacts["SECONDS"]
 FORMAT = pyaudio.paInt16
 
-# Defining Directories for the projet
 
-audio_dir = os.path.join(root_dir, artifacts_dir)
-audio_input_dir = os.path.join(audio_dir, input_dir)
-audio_output_dir = os.path.join(audio_dir, output_dir)
-noise_removed_dir = os.path.join(audio_dir, removed_noise_dir)
-declipped_dir = os.path.join(audio_dir, declipped_dir)
-#filename = os.path.join(AUDIO_OUTPUT_FILE, "output.wav")
 
 
 CURRENT_TIME_STAMP = get_current_time()
 filename = f"recordeded_file_{CURRENT_TIME_STAMP}.wav"
-recorded_file_save_loc = os.path.join(audio_output_dir, filename)
+recorded_file_save_loc = os.path.join(output_dir, filename)
 
-noise_removed_file_name = os.path.join(noise_removed_dir, filename)
+noise_removed_file_name = os.path.join(removed_noise_dir, filename)
+bad_file_name = os.path.join(bad_dir, filename)
+declipped_filename = os.path.join(declipped_dir, filename)
 
 p = pyaudio.PyAudio()
 
@@ -104,7 +100,7 @@ async def reduceN(filename):
         return {"someting bad happends"}
 
 # If one audio signal is too loud for the microphone diaphram its become clipped. So we need to declipp it.
-@app.get('declip_audio')
+@app.get('/declip_audio/')
 async def declip_audio(filename):
     sample_rate, file_info = read(filename)
     np_array = np.array(file_info, dtype=float)  # load int16 wav file
@@ -122,7 +118,7 @@ async def declip_audio(filename):
     plot_special_segment(new_array)
 
     #save bad array from tutorial to demonstrate that we need to rescale
-    save_bad_file(sample_rate, new_array)
+    save_bad_file(sample_rate, new_array, bad_file_location=bad_file_name)
 
     # save new wav file
-    save_file(sample_rate, new_array, args.new_path)
+    save_file(sample_rate, new_array, declipped_filename)
