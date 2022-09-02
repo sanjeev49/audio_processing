@@ -43,7 +43,7 @@ $ conda activate ./env
 
 3. Install Required libraries
 ```bash
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 ```
 
 4. Initalize the uvicorn server 
