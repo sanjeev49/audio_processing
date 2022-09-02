@@ -42,7 +42,7 @@ $ pip install requirements.txt
 
 4. Initalize the uvicorn server 
 ```bash
-$ uvicorn main:app --reload
+$ uvicorn app:app --reload
 ```
 
 ## 🎯  demo

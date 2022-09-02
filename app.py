@@ -1,8 +1,8 @@
-from audio_processign.src.record_mic_play import record_audio, save_audio, play_audio
+from audio_processign.entity.record_mic_play import record_audio, save_audio, play_audio
 from audio_processign.utils.helper_function import get_current_time, read_yaml, create_directories
-from audio_processign.src.plot_audio import plotAudio
-from audio_processign.src.reduce_noise import redc_noise
-from audio_processign.src.declip import (
+from audio_processign.entity.plot_audio import plotAudio
+from audio_processign.entity.reduce_noise import redc_noise
+from audio_processign.entity.declip import (
     get_segments,
     declip_segments,
     plot_special_segment,
@@ -34,13 +34,11 @@ rate = artifacts["RATE"]
 seconds = artifacts["SECONDS"]
 FORMAT = pyaudio.paInt16
 
-
-
-
+# Initialiing filename on curretn timestamp
 CURRENT_TIME_STAMP = get_current_time()
 filename = f"recordeded_file_{CURRENT_TIME_STAMP}.wav"
-recorded_file_save_loc = os.path.join(output_dir, filename)
 
+recorded_filename = os.path.join(output_dir, filename)
 noise_removed_file_name = os.path.join(removed_noise_dir, filename)
 bad_file_name = os.path.join(bad_dir, filename)
 declipped_filename = os.path.join(declipped_dir, filename)
@@ -55,6 +53,7 @@ stream = p.open(
     frames_per_buffer=frames_per_buffer
 )
 
+
 # Recording audio stream
 app = FastAPI()
 
@@ -63,7 +62,7 @@ async def recordandsave():
     try:
         audio_frames = record_audio(stream = stream,p=p, FRAMES_PER_BUFFER=frames_per_buffer,
                                                                 RATE=rate,seconds=seconds)
-        save_audio(location_to_save=recorded_file_save_loc, p = p, CHANNELS=channels, FORMAT=FORMAT,
+        save_audio(location_to_save=recorded_filename, p = p, CHANNELS=channels, FORMAT=FORMAT,
         RATE=rate, FRAMES=audio_frames)
         return {"Adio saved at location":"locatoin"}
     except Exception as e:
