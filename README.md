@@ -47,7 +47,7 @@ $ uvicorn app:app --reload
 
 ## 🎯  demo
 
-1. Testing with **Images** (Put test inages in anywhere and give the location of this image to **img_path** parameter inside prediction model function in src/infrence.py file)
+1. Testing with **Recording voice and saving it at location predefined** (after starting server write `localhost:8000/record_save` in browser url to get a glace of the application)
 
 ![infrence_example](https://github.com/sanjeev49/audio_processing/blob/main/docs/Screenshot%202022-09-02%20124817.png)
 
