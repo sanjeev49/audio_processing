@@ -1,8 +1,8 @@
-from audio_processign.entity.record_mic_play import record_audio, save_audio, play_audio
-from audio_processign.utils.helper_function import get_current_time, read_yaml, create_directories
-from audio_processign.entity.plot_audio import plotAudio
-from audio_processign.entity.reduce_noise import redc_noise
-from audio_processign.entity.declip import (
+from audio_processing.component.record_mic_play import record_audio, save_audio, play_audio
+from audio_processing.utils.helper_function import get_current_time, read_yaml, create_directories
+from audio_processing.component.plot_audio import plotAudio
+from audio_processing.component.reduce_noise import redc_noise
+from audio_processing.component.declip import (
     get_segments,
     declip_segments,
     plot_special_segment,
@@ -10,7 +10,7 @@ from audio_processign.entity.declip import (
     save_file
 )
 import numpy as np
-from scipy.io.wavfile import read, write
+from scipy.io.wavfile import read
 import pyaudio
 import os
 from fastapi import FastAPI
