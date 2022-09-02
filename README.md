@@ -28,6 +28,7 @@ We can utilize this repository to process audio data.
 * noisereduce==2.0.1
 * uvicorn==0.18.3
 * pygame==2.1.2
+* PyYAML==6.0.0
 
 
 
