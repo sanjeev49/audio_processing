@@ -1,4 +1,5 @@
 fastapi==0.81.0
 pyAudio==0.2.12
 noisereduce==2.0.1
-uvicorn
+uvicorn==0.18.3
+pygame==2.1.2
