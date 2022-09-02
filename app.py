@@ -1,5 +1,5 @@
 from audio_processing.component.record_mic_play import record_audio, save_audio, play_audio
-from audio_processing.utils.helper_function import get_current_time, read_yaml, create_directories
+from audio_processing.utils.common import get_current_time, read_yaml, create_directories
 from audio_processing.component.plot_audio import plotAudio
 from audio_processing.component.reduce_noise import redc_noise
 from audio_processing.component.declip import (
@@ -9,6 +9,8 @@ from audio_processing.component.declip import (
     save_bad_file,
     save_file
 )
+from audio_processing.exception import audioException
+
 import numpy as np
 from scipy.io.wavfile import read
 import pyaudio
@@ -57,16 +59,16 @@ stream = p.open(
 # Recording audio stream
 app = FastAPI()
 
-@app.get('/record_and_save')
+@app.get('/record_and_save/')
 async def recordandsave():
     try:
         audio_frames = record_audio(stream = stream,p=p, FRAMES_PER_BUFFER=frames_per_buffer,
                                                                 RATE=rate,seconds=seconds)
         save_audio(location_to_save=recorded_filename, p = p, CHANNELS=channels, FORMAT=FORMAT,
         RATE=rate, FRAMES=audio_frames)
-        return {"Adio saved at location":"locatoin"}
+        return {"Audio is recorded and saved at location":recorded_filename}
     except Exception as e:
-        print("Someting bad happends")
+        raise audioException(e, sys) from e
 
 # Creating routes for fastapi application
 

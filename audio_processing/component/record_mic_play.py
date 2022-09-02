@@ -3,7 +3,7 @@ from pygame import mixer
 import logging
 import os 
 import sys
-from audio_processign.exception import audioException
+from audio_processing.exception import audioException
 
 logging.basicConfig(
     filename=os.path.join("logs", 'running_logs.log'), 
@@ -11,6 +11,7 @@ logging.basicConfig(
     format="[%(asctime)s: %(levelname)s: %(module)s]: %(message)s",
     filemode="a"
     )
+
 
 def record_audio(stream,p, FRAMES_PER_BUFFER,RATE, seconds):
     try:
@@ -21,7 +22,7 @@ def record_audio(stream,p, FRAMES_PER_BUFFER,RATE, seconds):
             data = stream.read(FRAMES_PER_BUFFER)
             frames.append(data)
         print("End recording")
-        logging.info(f"Recoded file for {seconds} seconds and ended"} 
+        logging.info(f"Recoded file for {seconds} seconds and ended")
         stream.close()
         stream.stop_stream()
         p.terminate()
@@ -31,24 +32,36 @@ def record_audio(stream,p, FRAMES_PER_BUFFER,RATE, seconds):
 
 
 def save_audio(location_to_save:str,p,  CHANNELS, FORMAT, RATE, FRAMES):
-    obj = wave.open(location_to_save, "wb")
-    obj.setnchannels(CHANNELS)
-    obj.setsampwidth(p.get_sample_size(FORMAT))
-    obj.setframerate(RATE)
-    obj.writeframes(b"".join(FRAMES))
-    obj.close()
+    """
+    this function will take the signal and save it the given location 
+    return: None
 
-
-
-#define stream chunk   
+    """
+    try:
+        obj = wave.open(location_to_save, "wb")
+        obj.setnchannels(CHANNELS)
+        obj.setsampwidth(p.get_sample_size(FORMAT))
+        obj.setframerate(RATE)
+        obj.writeframes(b"".join(FRAMES))
+        obj.close()
+        logging.info(f"Saved audio at location {location_to_save} ")
+    except Exception as e:
+        raise audioException(e, sys) from e 
+  
 def play_audio(filename):
-    mixer.init()
+    try:
+        mixer.init()
 
-    # Loading the song
-    mixer.music.load(filename)
+        # Loading the song
+        mixer.music.load(filename)
 
-    # Setting the volume
-    mixer.music.set_volume(0.7)
+        # Setting the volume
+        mixer.music.set_volume(0.7)
 
-    # Start playing the song
-    mixer.music.play()
+        # Start playing the song
+        logging.info(f"Start playing {filename}")
+        mixer.music.play()
+        logging.info(f"Finished playing {filename}")
+    except Exception as e:
+        logging.info(f"Error playing {filename}")
+        raise audioException(e, sys) from e 
